@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AdminLayout from '@/components/layouts/AdminLayout';
@@ -43,7 +42,7 @@ import {
   Car, 
   Train, 
   Bus, 
-  Airplane, 
+  Plane, 
   Hotel, 
   Utensils, 
   Camera, 
@@ -306,7 +305,7 @@ const TravelGuides = () => {
                           onCheckedChange={() => handleTransportFilterChange('airplane')} 
                         />
                         <label htmlFor="airplane" className="text-sm flex items-center">
-                          <Airplane className="h-4 w-4 mr-1" /> Airplane
+                          <Plane className="h-4 w-4 mr-1" /> Airplane
                         </label>
                       </div>
                     </div>
@@ -439,7 +438,7 @@ const TravelGuides = () => {
                           {guide.transport.includes('car') && <Car className="h-4 w-4" />}
                           {guide.transport.includes('train') && <Train className="h-4 w-4" />}
                           {guide.transport.includes('bus') && <Bus className="h-4 w-4" />}
-                          {guide.transport.includes('airplane') && <Airplane className="h-4 w-4" />}
+                          {guide.transport.includes('airplane') && <Plane className="h-4 w-4" />}
                         </div>
                       </TableCell>
                       <TableCell>{guide.date}</TableCell>
@@ -596,7 +595,7 @@ const TravelGuides = () => {
                     <div className="flex items-center space-x-2">
                       <Checkbox id="airplaneOption" />
                       <label htmlFor="airplaneOption" className="text-sm flex items-center">
-                        <Airplane className="h-4 w-4 mr-1" /> Airplane
+                        <Plane className="h-4 w-4 mr-1" /> Airplane
                       </label>
                     </div>
                   </div>
