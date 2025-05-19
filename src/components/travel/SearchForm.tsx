@@ -4,22 +4,32 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { 
   MapPin, Calendar, Users, Plane, Car, Bus, Train, Bike, Truck 
 } from 'lucide-react';
+import { Label } from '@/components/ui/label';
 
 interface SearchFormProps {
   transportMode: string;
   setTransportMode: (value: string) => void;
   priceRange: number[];
   setPriceRange: (value: number[]) => void;
+  tripType: string;
+  setTripType: (value: string) => void;
+  ageGroup: string;
+  setAgeGroup: (value: string) => void;
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({ 
   transportMode, 
   setTransportMode, 
   priceRange, 
-  setPriceRange 
+  setPriceRange,
+  tripType,
+  setTripType,
+  ageGroup,
+  setAgeGroup
 }) => {
   return (
     <Card className="bg-white shadow-lg p-5 mx-auto max-w-3xl">
@@ -98,6 +108,44 @@ const SearchForm: React.FC<SearchFormProps> = ({
               <span className="text-xs">Truck</span>
             </ToggleGroupItem>
           </ToggleGroup>
+        </div>
+        
+        {/* Trip Type Selection */}
+        <div className="mt-5 border-t pt-4">
+          <label className="text-xs font-medium text-gray-500 mb-2 block text-left">Trip Type</label>
+          <RadioGroup 
+            value={tripType} 
+            onValueChange={setTripType}
+            className="flex space-x-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="party" id="party" />
+              <Label htmlFor="party">Party Trip</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="normal" id="normal" />
+              <Label htmlFor="normal">Normal Trip</Label>
+            </div>
+          </RadioGroup>
+        </div>
+        
+        {/* Age Group Selection */}
+        <div className="mt-5 border-t pt-4">
+          <label className="text-xs font-medium text-gray-500 mb-2 block text-left">Age Group</label>
+          <RadioGroup 
+            value={ageGroup} 
+            onValueChange={setAgeGroup}
+            className="flex space-x-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="18-30" id="18-30" />
+              <Label htmlFor="18-30">18-30</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="30plus" id="30plus" />
+              <Label htmlFor="30plus">Above 30</Label>
+            </div>
+          </RadioGroup>
         </div>
         
         {/* Price Range Slider */}

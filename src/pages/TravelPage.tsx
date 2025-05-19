@@ -12,6 +12,8 @@ const TravelPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [priceRange, setPriceRange] = useState([1000, 3000]);
   const [transportMode, setTransportMode] = useState("");
+  const [tripType, setTripType] = useState(""); // "party" or "normal"
+  const [ageGroup, setAgeGroup] = useState(""); // "18-30" or "30plus"
   
   // Filter destinations based on selected filters
   const filteredDestinations = featuredDestinations.filter(destination => {
@@ -30,6 +32,16 @@ const TravelPage = () => {
       return false;
     }
     
+    // Filter by trip type (if selected)
+    if (tripType && destination.tripType !== tripType) {
+      return false;
+    }
+    
+    // Filter by age group (if selected)
+    if (ageGroup && destination.ageGroup !== ageGroup) {
+      return false;
+    }
+    
     return true;
   });
   
@@ -41,6 +53,10 @@ const TravelPage = () => {
         setTransportMode={setTransportMode}
         priceRange={priceRange}
         setPriceRange={setPriceRange}
+        tripType={tripType}
+        setTripType={setTripType}
+        ageGroup={ageGroup}
+        setAgeGroup={setAgeGroup}
       />
 
       {/* Destination Categories and Listings */}

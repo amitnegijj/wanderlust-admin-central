@@ -7,13 +7,21 @@ interface HeroSectionProps {
   setTransportMode: (value: string) => void;
   priceRange: number[];
   setPriceRange: (value: number[]) => void;
+  tripType: string;
+  setTripType: (value: string) => void;
+  ageGroup: string;
+  setAgeGroup: (value: string) => void;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
   transportMode,
   setTransportMode,
   priceRange,
-  setPriceRange
+  setPriceRange,
+  tripType,
+  setTripType,
+  ageGroup,
+  setAgeGroup
 }) => {
   return (
     <div className="relative bg-wanderlust-navy/90 text-white py-20">
@@ -31,6 +39,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             setTransportMode={setTransportMode}
             priceRange={priceRange}
             setPriceRange={setPriceRange}
+            tripType={tripType}
+            setTripType={setTripType}
+            ageGroup={ageGroup}
+            setAgeGroup={setAgeGroup}
           />
         </div>
       </div>
