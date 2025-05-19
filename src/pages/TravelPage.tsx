@@ -1,11 +1,17 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import PublicLayout from '@/components/layouts/PublicLayout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MapPin, Calendar, Users, Star, Plane, Hotel, Camera } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { 
+  MapPin, Calendar, Users, Star, Plane, Hotel, Camera, 
+  Car, Bus, Train, Bike, TramFront, Truck, 
+} from 'lucide-react';
 
 const TravelPage = () => {
   // Sample featured destinations
@@ -20,6 +26,7 @@ const TravelPage = () => {
       price: 1299,
       duration: "7 days",
       category: "Beach",
+      transportModes: ["plane", "bus"]
     },
     {
       id: 2,
@@ -31,6 +38,7 @@ const TravelPage = () => {
       price: 1599,
       duration: "10 days",
       category: "Cultural",
+      transportModes: ["plane", "train", "bike"]
     },
     {
       id: 3,
@@ -42,6 +50,7 @@ const TravelPage = () => {
       price: 1899,
       duration: "8 days",
       category: "Mountain",
+      transportModes: ["train", "car"]
     },
     {
       id: 4,
@@ -53,6 +62,7 @@ const TravelPage = () => {
       price: 1199,
       duration: "12 days",
       category: "Beach",
+      transportModes: ["plane", "bike", "car"]
     },
     {
       id: 5,
@@ -64,6 +74,7 @@ const TravelPage = () => {
       price: 2199,
       duration: "9 days",
       category: "Adventure",
+      transportModes: ["plane", "train", "bus"]
     },
     {
       id: 6,
@@ -75,10 +86,36 @@ const TravelPage = () => {
       price: 2899,
       duration: "10 days",
       category: "Safari",
+      transportModes: ["plane", "truck", "car"]
     }
   ];
 
   const categories = ["All", "Beach", "Mountain", "Cultural", "Safari", "Adventure"];
+  
+  // New state variables for filters
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [priceRange, setPriceRange] = useState([1000, 3000]);
+  const [transportMode, setTransportMode] = useState("");
+  
+  // Filter destinations based on selected filters
+  const filteredDestinations = featuredDestinations.filter(destination => {
+    // Filter by category
+    if (selectedCategory !== "All" && destination.category !== selectedCategory) {
+      return false;
+    }
+    
+    // Filter by price range
+    if (destination.price < priceRange[0] || destination.price > priceRange[1]) {
+      return false;
+    }
+    
+    // Filter by transport mode (if selected)
+    if (transportMode && !destination.transportModes.includes(transportMode)) {
+      return false;
+    }
+    
+    return true;
+  });
   
   return (
     <PublicLayout>
@@ -135,6 +172,61 @@ const TravelPage = () => {
                   </div>
                 </div>
                 
+                {/* New Travel Mode Selection */}
+                <div className="mt-5 border-t pt-4">
+                  <label className="text-xs font-medium text-gray-500 mb-2 block text-left">Travel Mode</label>
+                  <ToggleGroup 
+                    type="single" 
+                    value={transportMode} 
+                    onValueChange={(value) => setTransportMode(value)}
+                    className="flex flex-wrap justify-start gap-2"
+                  >
+                    <ToggleGroupItem value="car" aria-label="Car">
+                      <Car className="h-4 w-4 mr-1" />
+                      <span className="text-xs">Car</span>
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="bus" aria-label="Bus">
+                      <Bus className="h-4 w-4 mr-1" />
+                      <span className="text-xs">Bus</span>
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="train" aria-label="Train">
+                      <Train className="h-4 w-4 mr-1" />
+                      <span className="text-xs">Train</span>
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="plane" aria-label="Plane">
+                      <Plane className="h-4 w-4 mr-1" />
+                      <span className="text-xs">Plane</span>
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="bike" aria-label="Bike">
+                      <Bike className="h-4 w-4 mr-1" />
+                      <span className="text-xs">Bike</span>
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="truck" aria-label="Truck">
+                      <Truck className="h-4 w-4 mr-1" />
+                      <span className="text-xs">Truck</span>
+                    </ToggleGroupItem>
+                  </ToggleGroup>
+                </div>
+                
+                {/* Price Range Slider */}
+                <div className="mt-5 border-t pt-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-xs font-medium text-gray-500">Price Range</label>
+                    <span className="text-xs font-medium text-wanderlust-teal">
+                      ${priceRange[0]} - ${priceRange[1]}
+                    </span>
+                  </div>
+                  <Slider
+                    defaultValue={[1000, 3000]}
+                    min={500}
+                    max={5000}
+                    step={100}
+                    value={priceRange}
+                    onValueChange={setPriceRange}
+                    className="my-4"
+                  />
+                </div>
+                
                 <div className="mt-5 flex justify-center">
                   <Button className="bg-wanderlust-teal hover:bg-wanderlust-teal/90 text-white px-8">
                     <Plane className="w-4 h-4 mr-2" />
@@ -150,16 +242,21 @@ const TravelPage = () => {
       {/* Destination Categories */}
       <div className="container mx-auto px-4 py-16">
         <h2 className="text-2xl md:text-3xl font-bold mb-10 text-wanderlust-navy">Explore Destinations</h2>
-        <Tabs defaultValue="All" className="w-full">
+        <Tabs 
+          defaultValue="All" 
+          value={selectedCategory}
+          onValueChange={setSelectedCategory}
+          className="w-full"
+        >
           <TabsList className="mb-8 flex flex-wrap justify-center gap-2">
             {categories.map((category) => (
               <TabsTrigger key={category} value={category} className="px-5">{category}</TabsTrigger>
             ))}
           </TabsList>
           
-          <TabsContent value="All" className="mt-0">
+          <TabsContent value={selectedCategory} className="mt-0">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredDestinations.map(destination => (
+              {filteredDestinations.map(destination => (
                 <Card key={destination.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group h-full flex flex-col">
                   <div className="h-56 overflow-hidden relative">
                     <img 
@@ -179,6 +276,41 @@ const TravelPage = () => {
                       </div>
                     </div>
                     <p className="text-gray-600 mb-4 flex-grow">{destination.description}</p>
+                    
+                    {/* Transport modes */}
+                    <div className="flex gap-2 mb-3">
+                      {destination.transportModes.includes('car') && (
+                        <span className="bg-gray-100 p-1 rounded" title="Car">
+                          <Car className="w-3 h-3 text-wanderlust-navy" />
+                        </span>
+                      )}
+                      {destination.transportModes.includes('bus') && (
+                        <span className="bg-gray-100 p-1 rounded" title="Bus">
+                          <Bus className="w-3 h-3 text-wanderlust-navy" />
+                        </span>
+                      )}
+                      {destination.transportModes.includes('train') && (
+                        <span className="bg-gray-100 p-1 rounded" title="Train">
+                          <Train className="w-3 h-3 text-wanderlust-navy" />
+                        </span>
+                      )}
+                      {destination.transportModes.includes('plane') && (
+                        <span className="bg-gray-100 p-1 rounded" title="Plane">
+                          <Plane className="w-3 h-3 text-wanderlust-navy" />
+                        </span>
+                      )}
+                      {destination.transportModes.includes('bike') && (
+                        <span className="bg-gray-100 p-1 rounded" title="Bike">
+                          <Bike className="w-3 h-3 text-wanderlust-navy" />
+                        </span>
+                      )}
+                      {destination.transportModes.includes('truck') && (
+                        <span className="bg-gray-100 p-1 rounded" title="Truck">
+                          <Truck className="w-3 h-3 text-wanderlust-navy" />
+                        </span>
+                      )}
+                    </div>
+                    
                     <div className="flex items-center justify-between mt-auto pt-4 border-t">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4 text-wanderlust-teal" />
@@ -194,48 +326,6 @@ const TravelPage = () => {
               ))}
             </div>
           </TabsContent>
-          
-          {["Beach", "Mountain", "Cultural", "Safari", "Adventure"].map((category) => (
-            <TabsContent key={category} value={category} className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {featuredDestinations
-                  .filter(destination => destination.category === category)
-                  .map(destination => (
-                    <Card key={destination.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group h-full flex flex-col">
-                      <div className="h-56 overflow-hidden relative">
-                        <img 
-                          src={destination.image} 
-                          alt={destination.name} 
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                        <Badge className="absolute top-3 left-3 bg-white text-wanderlust-navy">{destination.category}</Badge>
-                      </div>
-                      <CardContent className="p-6 flex-grow flex flex-col">
-                        <div className="flex justify-between items-start mb-2">
-                          <h3 className="text-xl font-bold text-wanderlust-navy group-hover:text-wanderlust-teal transition-colors">{destination.name}</h3>
-                          <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            <span className="font-medium">{destination.rating}</span>
-                            <span className="text-gray-500 text-sm">({destination.reviews})</span>
-                          </div>
-                        </div>
-                        <p className="text-gray-600 mb-4 flex-grow">{destination.description}</p>
-                        <div className="flex items-center justify-between mt-auto pt-4 border-t">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4 text-wanderlust-teal" />
-                            <span className="text-sm text-gray-600">{destination.duration}</span>
-                          </div>
-                          <div>
-                            <span className="font-bold text-lg text-wanderlust-navy">${destination.price}</span>
-                            <span className="text-gray-500"> / person</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                ))}
-              </div>
-            </TabsContent>
-          ))}
         </Tabs>
       </div>
 
