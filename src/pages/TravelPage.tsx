@@ -7,6 +7,12 @@ import TravelExperience from '@/components/travel/TravelExperience';
 import CallToAction from '@/components/travel/CallToAction';
 import { featuredDestinations, categories } from '@/data/destinationsData';
 
+// Update the type definition to include tripType and ageGroup
+type Destination = typeof featuredDestinations[0] & {
+  tripType?: string;
+  ageGroup?: string;
+};
+
 const TravelPage = () => {
   // State variables for filters
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -33,12 +39,12 @@ const TravelPage = () => {
     }
     
     // Filter by trip type (if selected)
-    if (tripType && destination.tripType !== tripType) {
+    if (tripType && (destination as Destination).tripType !== tripType) {
       return false;
     }
     
     // Filter by age group (if selected)
-    if (ageGroup && destination.ageGroup !== ageGroup) {
+    if (ageGroup && (destination as Destination).ageGroup !== ageGroup) {
       return false;
     }
     
