@@ -1,9 +1,6 @@
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
 import {
   BarChart2,
   Users,
@@ -13,16 +10,6 @@ import {
 } from 'lucide-react';
 
 const AdminHome = () => {
-  const { isAuthenticated, loading } = useAuth();
-  const navigate = useNavigate();
-
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      navigate('/admin/login');
-    }
-  }, [isAuthenticated, loading, navigate]);
-
   // Mock data for quick stats
   const quickStats = [
     { title: "Active Bookings", value: 127, change: "+12%", icon: <Calendar className="h-8 w-8 text-wanderlust-teal" /> },
@@ -65,6 +52,11 @@ const AdminHome = () => {
         <div>
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
           <p className="text-muted-foreground">Welcome to the Wanderlust Admin Dashboard</p>
+          <div className="mt-2 p-2 bg-yellow-100 border border-yellow-400 rounded-md">
+            <p className="text-sm text-yellow-800">
+              <strong>Notice:</strong> Login is temporarily disabled for development purposes.
+            </p>
+          </div>
         </div>
         
         {/* Quick Stats */}
